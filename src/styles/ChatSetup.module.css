@@ -7,8 +7,6 @@
   padding: 28px;
   background: #ffffff;
   border-radius: 10px;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .form h2 {
@@ -42,13 +40,13 @@
   margin-top: 8px;
   padding: 11px 16px;
   border: none;
-  border-radius: 6px;
-  background: #527da3;
+  border-radius: 10px;
+  background: #3390ec;
   color: #ffffff;
 }
 
 .button:hover:not(:disabled) {
-  background: #456b8c;
+  background: #2b82d4;
 }
 
 .error {

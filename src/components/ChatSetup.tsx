@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from "react";
 
-import styles from '../styles/ChatSetup.module.css';
+import styles from "../styles/ChatSetup.module.css";
 
 type ChatSetupProps = {
   onChatCreate: (phoneNumber: string) => void;
@@ -11,6 +11,7 @@ type ChatSetupProps = {
 export function ChatSetup({ onChatCreate, isLoading, error }: ChatSetupProps) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [validationError, setValidationError] = useState("");
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const normalizedPhone = phoneNumber.replace(/\D/g, "");
@@ -36,8 +37,11 @@ export function ChatSetup({ onChatCreate, isLoading, error }: ChatSetupProps) {
             className={styles.input}
             type="text"
             value={phoneNumber}
-            onChange={(event) => setPhoneNumber(event.target.value)}
-            placeholder="+79991234567"
+            onChange={(event) => {
+              setPhoneNumber(event.target.value);
+              setValidationError("");
+            }}
+            placeholder="79991234567"
             required
           />
         </label>

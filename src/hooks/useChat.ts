@@ -111,7 +111,6 @@ export function useChat(credentials: GreenApiCredentials | null) {
                 });
               }
             }
-
             await deleteNotification(credentials, notification.receiptId);
           }
           setReceivingError("");

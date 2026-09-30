@@ -1,6 +1,6 @@
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import type { Message } from "../types";
-import styles from '../styles/Chat.module.css';
+import styles from "../styles/Chat.module.css";
 
 type ChatProps = {
   phoneNumber: string;
@@ -61,46 +61,53 @@ export function Chat({
           Новый чат
         </button>
       </div>
+
       <div className={styles.messages}>
         {messages.length === 0 ? (
           <div className={styles.empty}>
             <p>Сообщений пока нет</p>
           </div>
         ) : (
-          messages.map((message) => (
+          messages.map((msg) => (
             <div
-              key={message.id}
+              key={msg.id}
               className={`${styles.message} ${
-                message.direction === "outgoing"
-                  ? styles.outgoing
-                  : styles.incoming
+                msg.direction === "outgoing" ? styles.outgoing : styles.incoming
               }`}
             >
-              <span className={styles.text}>{message.text}</span>
-              <span className={styles.time}>
-                {formatTime(message.timestamp)}
-              </span>
+              <span className={styles.text}>{msg.text}</span>
+              <span className={styles.time}>{formatTime(msg.timestamp)}</span>
             </div>
           ))
         )}
         <div ref={messagesEndRef} />
       </div>
+
       {error && <p className={styles.error}>{error}</p>}
+
       <form className={styles.messageForm} onSubmit={handleSubmit}>
         <input
           className={styles.input}
           type="text"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="Напишите сообщение..."
+          placeholder="Сообщение..."
           disabled={isLoading}
         />
         <button
           className={styles.sendButton}
           type="submit"
           disabled={isLoading || !message.trim()}
+          title="Отправить сообщение"
         >
-          {isLoading ? "..." : "Отправить"}
+          <svg
+            className={styles.sendIcon}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
         </button>
       </form>
     </section>

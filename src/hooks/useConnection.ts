@@ -25,12 +25,10 @@ export function useConnection() {
       setIsLoading(false);
     }
   };
-
   const logout = () => {
     setCredentials(null);
     setError("");
   };
-
   return {
     credentials,
     isLoading,
