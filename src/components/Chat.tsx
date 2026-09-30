@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import type { Message } from "../types";
+import styles from '../styles/Chat.module.css';
 
 type ChatProps = {
   phoneNumber: string;
@@ -19,18 +20,21 @@ export function Chat({
   error,
 }: ChatProps) {
   const [message, setMessage] = useState("");
-  const messagesRef = useRef<HTMLDivElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    messagesRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [messages]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!message.trim()) {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const text = message.trim();
+    if (!text) {
       return;
     }
-    const sent = await onSendMessage(message);
+    const sent = await onSendMessage(text);
     if (sent) {
       setMessage("");
     }
@@ -44,47 +48,58 @@ export function Chat({
   };
 
   return (
-    <section className="chat">
-      <div className="chat-header">
-        <div className="chat-user">
-          <div className="avatar">T</div>
+    <section className={styles.chat}>
+      <div className={styles.header}>
+        <div className={styles.user}>
+          <div className={styles.avatar}>T</div>
           <div>
             <h2>Telegram</h2>
             <p>{phoneNumber}</p>
           </div>
         </div>
-        <button className="change-chat-button" onClick={onChangeChat}>
+        <button className={styles.changeButton} onClick={onChangeChat}>
           Новый чат
         </button>
       </div>
-      <div className="messages">
+      <div className={styles.messages}>
         {messages.length === 0 ? (
-          <div className="empty-chat">
+          <div className={styles.empty}>
             <p>Сообщений пока нет</p>
           </div>
         ) : (
           messages.map((message) => (
-            <div key={message.id} className={`message ${message.direction}`}>
-              <span className="message-text">{message.text}</span>
-
-              <span className="message-time">
+            <div
+              key={message.id}
+              className={`${styles.message} ${
+                message.direction === "outgoing"
+                  ? styles.outgoing
+                  : styles.incoming
+              }`}
+            >
+              <span className={styles.text}>{message.text}</span>
+              <span className={styles.time}>
                 {formatTime(message.timestamp)}
               </span>
             </div>
           ))
         )}
-        <div ref={messagesRef} />
+        <div ref={messagesEndRef} />
       </div>
-      {error && <p className="chat-error">{error}</p>}
-      <form className="message-form" onSubmit={handleSubmit}>
+      {error && <p className={styles.error}>{error}</p>}
+      <form className={styles.messageForm} onSubmit={handleSubmit}>
         <input
+          className={styles.input}
           type="text"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           placeholder="Напишите сообщение..."
           disabled={isLoading}
         />
-        <button type="submit" disabled={isLoading || !message.trim()}>
+        <button
+          className={styles.sendButton}
+          type="submit"
+          disabled={isLoading || !message.trim()}
+        >
           {isLoading ? "..." : "Отправить"}
         </button>
       </form>

@@ -1,17 +1,20 @@
-import { useState, type FormEvent } from "react";
+import { type FormEvent, useState } from "react";
+
 import type { GreenApiCredentials } from "../types";
+import styles from '../styles/ConnectionForm.module.css';
 
 type ConnectionFormProps = {
   onConnect: (credentials: GreenApiCredentials) => void;
   isLoading: boolean;
+  error: string;
 };
 
-export function ConnectionForm({ onConnect, isLoading }: ConnectionFormProps) {
+export function ConnectionForm({ onConnect, isLoading, error }: ConnectionFormProps) {
   const [idInstance, setIdInstance] = useState("");
   const [apiTokenInstance, setApiTokenInstance] = useState("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     onConnect({
       idInstance: idInstance.trim(),
       apiTokenInstance: apiTokenInstance.trim(),
@@ -19,29 +22,35 @@ export function ConnectionForm({ onConnect, isLoading }: ConnectionFormProps) {
   };
 
   return (
-    <form className="connection" onSubmit={handleSubmit}>
-      <h2>Подключение</h2>
-      <label>
-        ID инстанса
-        <input
-          type="text"
-          value={idInstance}
-          onChange={(e) => setIdInstance(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        API токен
-        <input
-          type="password"
-          value={apiTokenInstance}
-          onChange={(e) => setApiTokenInstance(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "Подключение..." : "Подключиться"}
-      </button>
-    </form>
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h2>Подключение</h2>
+        <label className={styles.label}>
+          ID инстанса
+          <input
+            className={styles.input}
+            type="text"
+            value={idInstance}
+            onChange={(event) => setIdInstance(event.target.value)}
+            required
+          />
+        </label>
+        <label className={styles.label}>
+          API Token
+          <input
+            className={styles.input}
+            type="password"
+            value={apiTokenInstance}
+            onChange={(event) => setApiTokenInstance(event.target.value)}
+            required
+          />
+        </label>
+        {error && <p className={styles.error}>{error}</p>}
+        <button className={styles.button} type="submit" disabled={isLoading}>
+          {isLoading ? "Подключение..." : "Подключиться"}
+        </button>
+      </form>
+    </div>
   );
 }
+
